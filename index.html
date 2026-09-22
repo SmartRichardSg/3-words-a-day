@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#2563eb">
-<title>3 Words a Day</title>
+<title>3 Words a Day — Advanced</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f4f7fb;color:#172033;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -34,21 +34,30 @@ button{border:0;border-radius:14px;padding:13px 16px;font-size:15px;font-weight:
 input{width:100%;padding:13px;border:1px solid #d7deea;border-radius:12px;font-size:16px}
 .center{text-align:center}
 footer{text-align:center;color:#718096;font-size:12px;margin-top:20px}
+.badge{display:inline-block;background:#eaf2ff;color:#2563eb;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;margin-top:8px}
 </style>
 </head>
 <body>
 <div class="app">
-<header><h1>3 Words a Day</h1><div class="tag">Small Steps. Better Every Day.</div></header>
+<header>
+<h1>3 Words a Day</h1>
+<div class="tag">Small Steps. Better Every Day.</div>
+<div class="badge">ADVANCED VOCABULARY</div>
+</header>
+
 <div class="card">
 <div class="top"><span id="date"></span><span class="day" id="day"></span></div>
 <div class="progress"><div class="bar" id="bar"></div></div>
 <p class="small" id="progressText"></p>
 </div>
+
 <div id="words"></div>
+
 <div class="nav">
 <button class="secondary" onclick="changeDay(-1)">← Previous</button>
 <button class="secondary" onclick="changeDay(1)">Next →</button>
 </div>
+
 <div class="card center">
 <div class="stats">
 <div class="stat"><div class="num" id="learned">0</div><div class="small">Completed</div></div>
@@ -57,20 +66,29 @@ footer{text-align:center;color:#718096;font-size:12px;margin-top:20px}
 </div>
 <div class="actions"><button class="primary" onclick="markDone()">✓ Mark today complete</button></div>
 </div>
+
 <div class="card">
 <b>Quick practice</b>
 <p class="small">Type one of today's words from memory.</p>
 <input id="quiz" placeholder="Type a word...">
-<div class="actions"><button class="primary" onclick="checkQuiz()">Check</button><button class="secondary" onclick="speakAll()">🔊 Hear words</button></div>
+<div class="actions">
+<button class="primary" onclick="checkQuiz()">Check</button>
+<button class="secondary" onclick="speakAll()">🔊 Hear words</button>
+</div>
 <p id="result" class="small"></p>
 </div>
-<footer>Day 1 starts on 21 September 2026. Your progress is saved on this device.</footer>
+
+<footer>
+30 advanced lessons • 90 less-common words<br>
+Day 1 starts on 21 September 2026. Your progress is saved on this device.
+</footer>
 </div>
+
 <script>
-const lessons=[[["curious","wanting to learn or know more","A curious mind keeps asking useful questions."],["steady","firm, regular, and dependable","Steady practice is more useful than occasional bursts of effort."],["vivid","very clear and detailed in the mind","He has a vivid memory of his childhood home."]],[["concise","short but clear","Please give me a concise summary of the book."],["diligent","careful and hardworking","Her diligent practice improved her English."],["adapt","change to suit a new situation","We can adapt our routine when circumstances change."]],[["resilient","able to recover after difficulty","A resilient person keeps going after setbacks."],["gracious","kind and polite","She was gracious when receiving the compliment."],["subtle","small or not immediately obvious","There was a subtle change in his voice."]],[["thrive","grow or develop well","People often thrive when they have a clear purpose."],["humble","not overly proud","Despite his success, he remained humble."],["embrace","accept something willingly","He decided to embrace the new opportunity."]],[["eloquent","expressing ideas clearly and effectively","Her simple words were surprisingly eloquent."],["prudent","showing good judgment","Saving regularly is a prudent habit."],["optimistic","expecting good things to happen","He stayed optimistic about the future."]],[["persistent","continuing despite difficulty","Persistent effort eventually produces results."],["authentic","genuine and real","She values authentic conversations."],["reflect","think carefully about something","Take a few minutes to reflect on what you learned."]],[["coherent","logical and easy to understand","His explanation was coherent and easy to follow."],["generous","willing to give or share","She was generous with her time."],["cultivate","develop something through care and effort","Reading helps cultivate curiosity."]],[["nuance","a small but important difference","The discussion missed an important nuance."],["spontaneous","done without planning","They took a spontaneous walk after dinner."],["compassion","concern for another person's difficulties","Compassion changes how we treat other people."]],[["aspire","strongly hope to achieve something","He aspires to keep learning throughout life."],["resourceful","good at finding practical solutions","She is resourceful when problems arise."],["gratitude","thankfulness","A daily gratitude habit can improve your outlook."]],[["profound","very deep or meaningful","The book had a profound effect on him."],["flexible","able to change or adapt","A flexible plan is easier to maintain."],["persevere","continue despite difficulty","If you persevere, small improvements add up."]],[["enhance","improve the quality or value of something","Good lighting can enhance a photograph."],["serene","calm and peaceful","The garden was serene in the early morning."],["reliable","consistently dependable","A reliable routine makes learning easier."]],[["contemplate","think about something deeply","She took time to contemplate the decision."],["precise","exact and accurate","Please give me the precise time."],["encounter","meet or experience unexpectedly","You may encounter challenges along the way."]],[["inevitable","certain to happen","Change is an inevitable part of life."],["sustain","keep something going","Small habits help sustain long-term progress."],["vital","extremely important","Sleep is vital for good health."]],[["allocate","give something for a particular purpose","He decided to allocate thirty minutes to reading."],["improvise","create or perform without preparation","When the plan changed, they had to improvise."],["transform","change something significantly","Daily practice can transform your skills."]],[["commend","praise someone for something they did well","The teacher commended her steady effort."],["feasible","possible and practical","The goal is challenging but feasible."],["refine","improve something through small changes","She continued to refine her writing."]],[["mindful","aware and attentive","Try to be mindful of your breathing."],["equilibrium","a state of balance","Exercise can help maintain a healthy equilibrium."],["articulate","express an idea clearly","He can articulate complex ideas simply."]],[["innovative","introducing new ideas or methods","The team developed an innovative solution."],["abundant","more than enough","The garden produced an abundant harvest."],["credible","worthy of being believed","The report came from a credible source."]],[["acumen","the ability to make good judgments","His business acumen helped the company grow."],["affable","friendly and easy to talk to","Our new neighbour is very affable."],["agile","able to move or change quickly","An agile mind can adjust to new ideas."]],[["amiable","pleasant and friendly","He has an amiable personality."],["ample","enough or more than enough","We had ample time to finish the task."],["anticipate","expect something to happen","We anticipate a busy morning."]],[["astute","clever and good at judging situations","She made an astute observation."],["augment","increase or improve something","Walking can augment a regular exercise routine."],["bolster","support or strengthen","The new evidence helped bolster his argument."]],[["candid","honest and direct","He gave a candid answer to the question."],["capacity","the ability or amount that something can contain","The hall has a large seating capacity."],["catalyst","something that causes change","The book became a catalyst for a new habit."]],[["collaborate","work together","The two writers decided to collaborate."],["comprehensive","including everything important","She prepared a comprehensive plan."],["concede","admit that something is true","He had to concede that she was right."]],[["cordial","polite and friendly","They had a cordial conversation."],["cumulative","increasing through successive additions","The cumulative effect of small habits can be powerful."],["decisive","able to make decisions quickly and clearly","He took decisive action."]],[["discern","notice or recognize something","With practice, you can discern small differences."],["discreet","careful not to attract attention","She was discreet about the private matter."],["distinct","clearly different","The two ideas are quite distinct."]],[["efficient","working well without wasting time or effort","A simple routine can be very efficient."],["empathetic","able to understand another person's feelings","An empathetic listener makes people feel heard."],["endure","continue through something difficult","He learned to endure temporary discomfort."]],[["enthusiastic","very interested and excited","She is enthusiastic about learning languages."],["evaluate","judge the quality or value of something","Take time to evaluate your progress."],["facilitate","make something easier","Good notes facilitate later revision."]],[["flourish","grow or develop successfully","Plants flourish with enough sunlight."],["formidable","very difficult or impressive","Learning a language can seem formidable at first."],["frugal","careful about spending money","He is frugal without being stingy."]],[["genuine","real and sincere","Her smile looked genuine."],["gradual","happening slowly over time","Gradual improvement is easier to maintain."],["holistic","considering the whole rather than one part","She takes a holistic approach to learning."]],[["impartial","not favoring one side","A good referee should remain impartial."],["ingenious","clever and inventive","He found an ingenious way to organize his notes."],["integrity","honesty and strong moral principles","People trust her because she acts with integrity."]],[["intuitive","understood naturally without conscious reasoning","The new app feels intuitive to use."],["judicious","showing careful and sensible judgment","He made a judicious choice."],["momentum","the force that keeps something developing","Once the habit starts, it creates momentum."]]];
-const START=new Date("2026-09-21T00:00:00");
-let offset=0;
-const completed=JSON.parse(localStorage.getItem("threeWordsCompleted")||"[]");
+const lessons = [[["aberration", "something unusual or different from what is normal", "His poor performance was an aberration; he normally does very well."], ["analogous", "similar in an important way", "The human brain is analogous to a computer in some ways."], ["anomaly", "something unusual that does not fit the normal pattern", "The unusually high reading was an anomaly."]], [["contentious", "causing disagreement or argument", "The proposal became a contentious issue."], ["conundrum", "a difficult problem with no obvious answer", "Choosing between the two options was a conundrum."], ["delineate", "describe or show something clearly", "The report delineates the responsibilities of each department."]], [["extrapolate", "estimate using known information or trends", "We can extrapolate future results from the current trend."], ["juxtapose", "place two things together to show their differences", "The exhibition juxtaposed old and modern photographs."], ["ostensibly", "apparently; seeming to be the reason", "He ostensibly retired to spend more time with his family."]], [["pervasive", "existing or spreading throughout something", "Smartphones have become pervasive in modern life."], ["prevalent", "common or widespread", "The condition is prevalent among older adults."], ["disseminate", "spread information widely", "The organization disseminates useful information to the public."]], [["acquiesce", "accept something without protesting", "He eventually acquiesced to their request."], ["ambivalence", "having mixed feelings", "She felt ambivalence about retiring."], ["assiduous", "very hardworking and persistent", "He was assiduous in his studies."]], [["circumspect", "careful about what you say or do", "He was circumspect when discussing the sensitive issue."], ["cogent", "clear, logical and convincing", "She presented a cogent argument."], ["convoluted", "complicated and difficult to understand", "The instructions were unnecessarily convoluted."]], [["deleterious", "harmful", "Lack of sleep can have deleterious effects."], ["deride", "mock or make fun of", "Critics derided the proposal."], ["didactic", "intended to teach, sometimes too obviously", "The book has a strongly didactic tone."]], [["enigmatic", "mysterious; difficult to understand", "He gave an enigmatic smile."], ["ephemeral", "lasting for a very short time", "Fame can be ephemeral."], ["equivocal", "unclear or deliberately ambiguous", "His answer was equivocal."]], [["fortuitous", "happening by chance, often fortunately", "A fortuitous meeting changed her career."], ["gratuitous", "unnecessary or uncalled-for", "His gratuitous criticism upset her."], ["immutable", "unable to be changed", "Some people regard these principles as immutable."]], [["incongruous", "strange because it does not fit its surroundings", "His formal suit looked incongruous at the beach."], ["indefatigable", "never seeming to get tired", "She was an indefatigable worker."], ["insidious", "harmful in a gradual, difficult-to-notice way", "Stress can have an insidious effect on health."]], [["laconic", "using very few words", "His laconic reply was simply, “Maybe.”"], ["magnanimous", "generous and forgiving, especially toward a rival", "She was magnanimous after winning."], ["mendacious", "lying; dishonest", "The report contained several mendacious claims."]], [["onerous", "burdensome; difficult and unpleasant", "The paperwork became an onerous task."], ["ostensible", "appearing to be true or genuine, but possibly not", "His ostensible reason for leaving was poor health."], ["parsimonious", "extremely unwilling to spend money", "His parsimonious nature made him reluctant to travel."]], [["recalcitrant", "stubbornly refusing to obey or cooperate", "The recalcitrant employee refused to follow the instructions."], ["reticent", "unwilling to speak freely", "He was reticent about his personal life."], ["sagacious", "wise and showing good judgment", "The sagacious investor avoided unnecessary risks."]], [["salient", "most noticeable or important", "She highlighted the salient points of the report."], ["sanguine", "optimistic, especially in a difficult situation", "Despite the setback, he remained sanguine about the future."], ["sporadic", "happening occasionally and irregularly", "He made sporadic attempts to exercise."]], [["succinct", "brief and clearly expressed", "Please give me a succinct answer."], ["superfluous", "unnecessary; more than needed", "The final paragraph was superfluous."], ["tacit", "understood without being openly stated", "There was a tacit agreement between them."]], [["trenchant", "sharp, forceful and effective", "She made a trenchant criticism of the proposal."], ["vacillate", "repeatedly change between choices", "He vacillated between buying and renting."], ["vehement", "showing very strong emotion or force", "He issued a vehement denial."]], [["veracity", "truthfulness or accuracy", "The police questioned the veracity of his statement."], ["vociferous", "very loud and forceful in expressing an opinion", "There was vociferous opposition to the proposal."], ["whimsical", "playfully unusual or imaginative", "She has a whimsical sense of humour."]], [["abstruse", "difficult to understand", "The professor explained an abstruse theory."], ["acrimonious", "angry and bitter, especially in an argument", "The meeting ended in an acrimonious dispute."], ["alacrity", "cheerful willingness; eagerness", "She accepted the invitation with alacrity."]], [["ameliorate", "make something better", "The new measures may ameliorate the problem."], ["antithetical", "completely opposed or contrasting", "His views are antithetical to mine."], ["apocryphal", "probably untrue, although widely believed", "The story may be apocryphal."]], [["arduous", "requiring a lot of effort", "Climbing the mountain was an arduous task."], ["austere", "plain, simple and without luxury", "The room had an austere appearance."], ["bellicose", "aggressive and eager to fight", "His bellicose speech alarmed his neighbours."]], [["brevity", "shortness in speech or writing", "I appreciate the brevity of your explanation."], ["capricious", "changing suddenly and unpredictably", "The weather can be capricious."], ["caustic", "extremely critical or sarcastic", "His caustic remarks upset his colleagues."]], [["circumvent", "avoid a problem or rule, often cleverly", "They tried to circumvent the regulations."], ["clandestine", "secret, especially because something is not allowed", "They held a clandestine meeting."], ["conjecture", "an opinion or guess without enough evidence", "His explanation was merely conjecture."]], [["demagogue", "a political leader who gains support by appealing to emotions and prejudice", "The demagogue used fear to attract supporters."], ["denigrate", "unfairly criticize or belittle", "You should not denigrate someone’s achievements."], ["derivative", "copied or developed from something else", "The movie felt derivative of earlier films."]], [["desultory", "lacking energy, purpose or enthusiasm", "He made a desultory attempt to clean the room."], ["dichotomy", "a division between two strongly contrasting things", "There is a dichotomy between theory and practice."], ["diffident", "lacking confidence", "He was too diffident to speak at the meeting."]], [["dilatory", "causing delay; slow to act", "His dilatory approach frustrated everyone."], ["disparage", "speak of someone or something as inferior", "He should not disparage other people’s efforts."], ["eclectic", "choosing from many different styles or sources", "She has eclectic musical tastes."]], [["efficacious", "effective; producing the desired result", "The treatment proved efficacious."], ["egregious", "remarkably bad or shocking", "It was an egregious error."], ["elucidate", "explain something clearly", "The teacher elucidated the difficult concept."]], [["enervate", "make someone feel weak or tired", "The intense heat enervated him."], ["entrenched", "firmly established and difficult to change", "The habit had become deeply entrenched."], ["esoteric", "understood by only a small group with special knowledge", "The book discusses esoteric philosophical ideas."]], [["exorbitant", "excessively expensive", "The hotel charged an exorbitant price."], ["fastidious", "very careful about details and standards", "He is fastidious about keeping his desk tidy."], ["florid", "excessively elaborate or complicated in style", "His writing was rather florid."]], [["gregarious", "sociable; enjoying the company of others", "He is naturally gregarious and enjoys meeting people."], ["hackneyed", "overused and therefore no longer interesting", "The phrase has become hackneyed."], ["idiosyncratic", "peculiar or distinctive to an individual", "She has an idiosyncratic way of organising her books."]], [["impetuous", "acting suddenly without thinking", "His impetuous decision caused problems later."], ["inadvertent", "accidental; unintentional", "I made an inadvertent mistake."], ["incisive", "clear, sharp and intelligent", "She asked an incisive question."]]];
+const START = new Date("2026-09-21T00:00:00");
+let offset = 0;
+const completed = JSON.parse(localStorage.getItem("threeWordsCompleted") || "[]");
 
 function realDay(){
  const d=new Date(); d.setHours(0,0,0,0);
@@ -78,8 +96,7 @@ function realDay(){
 }
 function idx(){
  let n=realDay()+offset;
- n=Math.max(0,Math.min(lessons.length-1,n));
- return n;
+ return Math.max(0,Math.min(lessons.length-1,n));
 }
 function render(){
  const i=idx(), ws=lessons[i];
@@ -87,38 +104,58 @@ function render(){
  document.getElementById("date").textContent=d.toLocaleDateString(undefined,{weekday:"long",year:"numeric",month:"long",day:"numeric"});
  document.getElementById("day").textContent="Day "+(i+1)+" / 30";
  document.getElementById("bar").style.width=((i+1)/30*100)+"%";
- document.getElementById("progressText").textContent=(i+1)+" of 30 starter lessons";
+ document.getElementById("progressText").textContent=(i+1)+" of 30 advanced lessons";
  document.getElementById("words").innerHTML=ws.map((w,n)=>`
  <div class="card">
- <div class="small">WORD ${n+1}</div>
- <div class="word">${w[0]}</div>
- <div class="meaning">${w[1]}</div>
- <div class="example"><b>Example:</b> ${w[2]}</div>
- <div class="actions"><button class="secondary" onclick="speak(${n})">🔊 Listen</button></div>
+   <div class="small">WORD ${n+1}</div>
+   <div class="word">${w[0]}</div>
+   <div class="meaning">${w[1]}</div>
+   <div class="example"><b>Example:</b> ${w[2]}</div>
+   <div class="actions"><button class="secondary" onclick="speak(${n})">🔊 Listen</button></div>
  </div>`).join("");
  document.getElementById("learned").textContent=completed.length;
  document.getElementById("streak").textContent=streak();
 }
-function changeDay(n){offset+=n;render();scrollTo({top:0,behavior:"smooth"})}
-function speak(n){
- const w=lessons[idx()][n],u=new SpeechSynthesisUtterance(w[0]+". "+w[1]+". "+w[2]);
- u.rate=.8;speechSynthesis.cancel();speechSynthesis.speak(u);
+function changeDay(n){
+ offset+=n;
+ render();
+ window.scrollTo({top:0,behavior:"smooth"});
 }
-function speakAll(){for(let n=0;n<3;n++)setTimeout(()=>speak(n),n*3000)}
+function speak(n){
+ const w=lessons[idx()][n];
+ const u=new SpeechSynthesisUtterance(w[0]+". "+w[1]+". "+w[2]);
+ u.rate=.8;
+ speechSynthesis.cancel();
+ speechSynthesis.speak(u);
+}
+function speakAll(){
+ for(let n=0;n<3;n++) setTimeout(()=>speak(n),n*3000);
+}
 function markDone(){
  const k=new Date().toISOString().slice(0,10);
- if(!completed.includes(k)){completed.push(k);localStorage.setItem("threeWordsCompleted",JSON.stringify(completed))}
- render();alert("Great! Today's 3 words are complete.");
+ if(!completed.includes(k)){
+   completed.push(k);
+   localStorage.setItem("threeWordsCompleted",JSON.stringify(completed));
+ }
+ render();
+ alert("Great! Today's 3 words are complete.");
 }
 function streak(){
  let n=0,d=new Date();
- while(completed.includes(d.toISOString().slice(0,10))){n++;d.setDate(d.getDate()-1);if(n>365)break}
+ while(completed.includes(d.toISOString().slice(0,10))){
+   n++;
+   d.setDate(d.getDate()-1);
+   if(n>365) break;
+ }
  return n;
 }
 function checkQuiz(){
  const a=document.getElementById("quiz").value.trim().toLowerCase();
  const ok=lessons[idx()].some(w=>w[0].toLowerCase()===a);
- document.getElementById("result").textContent=!a?"Type a word first.":ok?"✓ Correct — well done!":"Not one of today's words. Try again.";
+ document.getElementById("result").textContent=
+   !a ? "Type a word first." :
+   ok ? "✓ Correct — well done!" :
+   "Not one of today's words. Try again.";
 }
 render();
 </script>
