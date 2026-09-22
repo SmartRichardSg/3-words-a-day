@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<title>3 Words a Day — Advanced</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f7fb;color:#172033;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.app{max-width:560px;margin:auto;padding:18px 16px 35px}
+header{text-align:center;padding:12px 0 18px}
+h1{font-size:30px;margin:0 0 5px}
+.tag{color:#60708a;font-size:17px}
+.card{background:#fff;border-radius:22px;padding:20px;margin:12px 0;box-shadow:0 5px 20px rgba(20,40,80,.08)}
+.top{display:flex;justify-content:space-between;gap:10px;font-weight:700}
+.day{color:#2563eb}
+.progress{height:9px;background:#e2e8f0;border-radius:9px;margin-top:14px;overflow:hidden}
+.bar{height:100%;background:#2563eb}
+.small{font-size:14px;color:#65748b}
+.word{font-size:30px;font-weight:800;margin:8px 0 5px}
+.meaning{font-size:17px;color:#52627a}
+.example{margin-top:14px;padding:14px;background:#eff6ff;border-radius:14px;line-height:1.5}
+button{border:0;border-radius:14px;padding:13px 16px;font-size:15px;font-weight:700}
+.primary{background:#2563eb;color:#fff}
+.secondary{background:#e8eef7;color:#25344d}
+.actions{display:flex;gap:9px;margin-top:14px}
+.actions button{flex:1}
+.nav{display:flex;gap:10px;margin:14px 0}
+.nav button{flex:1}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.stat{background:#f6f8fb;border-radius:14px;padding:12px}
+.num{font-size:22px;font-weight:800}
+input{width:100%;padding:13px;border:1px solid #d7deea;border-radius:12px;font-size:16px}
+.center{text-align:center}
+footer{text-align:center;color:#718096;font-size:12px;margin-top:20px}
+.badge{display:inline-block;background:#eaf2ff;color:#2563eb;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<h1>3 Words a Day</h1>
+<div class="tag">Small Steps. Better Every Day.</div>
+<div class="badge">ADVANCED VOCABULARY</div>
+</header>
+
+<div class="card">
+<div class="top"><span id="date"></span><span class="day" id="day"></span></div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<p class="small" id="progressText"></p>
+</div>
+
+<div id="words"></div>
+
+<div class="nav">
+<button class="secondary" onclick="changeDay(-1)">← Previous</button>
+<button class="secondary" onclick="changeDay(1)">Next →</button>
+</div>
+
+<div class="card center">
+<div class="stats">
+<div class="stat"><div class="num" id="learned">0</div><div class="small">Completed</div></div>
+<div class="stat"><div class="num" id="streak">0</div><div class="small">Streak</div></div>
+<div class="stat"><div class="num">3</div><div class="small">Words</div></div>
+</div>
+<div class="actions"><button class="primary" onclick="markDone()">✓ Mark today complete</button></div>
+</div>
+
+<div class="card">
+<b>Quick practice</b>
+<p class="small">Type one of today's words from memory.</p>
+<input id="quiz" placeholder="Type a word...">
+<div class="actions">
+<button class="primary" onclick="checkQuiz()">Check</button>
+<button class="secondary" onclick="speakAll()">🔊 Hear words</button>
+</div>
+<p id="result" class="small"></p>
+</div>
+
+<footer>
+30 advanced lessons • 90 less-common words<br>
+Day 1 starts on 21 September 2026. Your progress is saved on this device.
+</footer>
+</div>
+
+<script>
+const lessons = [[["aberration", "something unusual or different from what is normal", "His poor performance was an aberration; he normally does very well."], ["analogous", "similar in an important way", "The human brain is analogous to a computer in some ways."], ["anomaly", "something unusual that does not fit the normal pattern", "The unusually high reading was an anomaly."]], [["contentious", "causing disagreement or argument", "The proposal became a contentious issue."], ["conundrum", "a difficult problem with no obvious answer", "Choosing between the two options was a conundrum."], ["delineate", "describe or show something clearly", "The report delineates the responsibilities of each department."]], [["extrapolate", "estimate using known information or trends", "We can extrapolate future results from the current trend."], ["juxtapose", "place two things together to show their differences", "The exhibition juxtaposed old and modern photographs."], ["ostensibly", "apparently; seeming to be the reason", "He ostensibly retired to spend more time with his family."]], [["pervasive", "existing or spreading throughout something", "Smartphones have become pervasive in modern life."], ["prevalent", "common or widespread", "The condition is prevalent among older adults."], ["disseminate", "spread information widely", "The organization disseminates useful information to the public."]], [["acquiesce", "accept something without protesting", "He eventually acquiesced to their request."], ["ambivalence", "having mixed feelings", "She felt ambivalence about retiring."], ["assiduous", "very hardworking and persistent", "He was assiduous in his studies."]], [["circumspect", "careful about what you say or do", "He was circumspect when discussing the sensitive issue."], ["cogent", "clear, logical and convincing", "She presented a cogent argument."], ["convoluted", "complicated and difficult to understand", "The instructions were unnecessarily convoluted."]], [["deleterious", "harmful", "Lack of sleep can have deleterious effects."], ["deride", "mock or make fun of", "Critics derided the proposal."], ["didactic", "intended to teach, sometimes too obviously", "The book has a strongly didactic tone."]], [["enigmatic", "mysterious; difficult to understand", "He gave an enigmatic smile."], ["ephemeral", "lasting for a very short time", "Fame can be ephemeral."], ["equivocal", "unclear or deliberately ambiguous", "His answer was equivocal."]], [["fortuitous", "happening by chance, often fortunately", "A fortuitous meeting changed her career."], ["gratuitous", "unnecessary or uncalled-for", "His gratuitous criticism upset her."], ["immutable", "unable to be changed", "Some people regard these principles as immutable."]], [["incongruous", "strange because it does not fit its surroundings", "His formal suit looked incongruous at the beach."], ["indefatigable", "never seeming to get tired", "She was an indefatigable worker."], ["insidious", "harmful in a gradual, difficult-to-notice way", "Stress can have an insidious effect on health."]], [["laconic", "using very few words", "His laconic reply was simply, “Maybe.”"], ["magnanimous", "generous and forgiving, especially toward a rival", "She was magnanimous after winning."], ["mendacious", "lying; dishonest", "The report contained several mendacious claims."]], [["onerous", "burdensome; difficult and unpleasant", "The paperwork became an onerous task."], ["ostensible", "appearing to be true or genuine, but possibly not", "His ostensible reason for leaving was poor health."], ["parsimonious", "extremely unwilling to spend money", "His parsimonious nature made him reluctant to travel."]], [["recalcitrant", "stubbornly refusing to obey or cooperate", "The recalcitrant employee refused to follow the instructions."], ["reticent", "unwilling to speak freely", "He was reticent about his personal life."], ["sagacious", "wise and showing good judgment", "The sagacious investor avoided unnecessary risks."]], [["salient", "most noticeable or important", "She highlighted the salient points of the report."], ["sanguine", "optimistic, especially in a difficult situation", "Despite the setback, he remained sanguine about the future."], ["sporadic", "happening occasionally and irregularly", "He made sporadic attempts to exercise."]], [["succinct", "brief and clearly expressed", "Please give me a succinct answer."], ["superfluous", "unnecessary; more than needed", "The final paragraph was superfluous."], ["tacit", "understood without being openly stated", "There was a tacit agreement between them."]], [["trenchant", "sharp, forceful and effective", "She made a trenchant criticism of the proposal."], ["vacillate", "repeatedly change between choices", "He vacillated between buying and renting."], ["vehement", "showing very strong emotion or force", "He issued a vehement denial."]], [["veracity", "truthfulness or accuracy", "The police questioned the veracity of his statement."], ["vociferous", "very loud and forceful in expressing an opinion", "There was vociferous opposition to the proposal."], ["whimsical", "playfully unusual or imaginative", "She has a whimsical sense of humour."]], [["abstruse", "difficult to understand", "The professor explained an abstruse theory."], ["acrimonious", "angry and bitter, especially in an argument", "The meeting ended in an acrimonious dispute."], ["alacrity", "cheerful willingness; eagerness", "She accepted the invitation with alacrity."]], [["ameliorate", "make something better", "The new measures may ameliorate the problem."], ["antithetical", "completely opposed or contrasting", "His views are antithetical to mine."], ["apocryphal", "probably untrue, although widely believed", "The story may be apocryphal."]], [["arduous", "requiring a lot of effort", "Climbing the mountain was an arduous task."], ["austere", "plain, simple and without luxury", "The room had an austere appearance."], ["bellicose", "aggressive and eager to fight", "His bellicose speech alarmed his neighbours."]], [["brevity", "shortness in speech or writing", "I appreciate the brevity of your explanation."], ["capricious", "changing suddenly and unpredictably", "The weather can be capricious."], ["caustic", "extremely critical or sarcastic", "His caustic remarks upset his colleagues."]], [["circumvent", "avoid a problem or rule, often cleverly", "They tried to circumvent the regulations."], ["clandestine", "secret, especially because something is not allowed", "They held a clandestine meeting."], ["conjecture", "an opinion or guess without enough evidence", "His explanation was merely conjecture."]], [["demagogue", "a political leader who gains support by appealing to emotions and prejudice", "The demagogue used fear to attract supporters."], ["denigrate", "unfairly criticize or belittle", "You should not denigrate someone’s achievements."], ["derivative", "copied or developed from something else", "The movie felt derivative of earlier films."]], [["desultory", "lacking energy, purpose or enthusiasm", "He made a desultory attempt to clean the room."], ["dichotomy", "a division between two strongly contrasting things", "There is a dichotomy between theory and practice."], ["diffident", "lacking confidence", "He was too diffident to speak at the meeting."]], [["dilatory", "causing delay; slow to act", "His dilatory approach frustrated everyone."], ["disparage", "speak of someone or something as inferior", "He should not disparage other people’s efforts."], ["eclectic", "choosing from many different styles or sources", "She has eclectic musical tastes."]], [["efficacious", "effective; producing the desired result", "The treatment proved efficacious."], ["egregious", "remarkably bad or shocking", "It was an egregious error."], ["elucidate", "explain something clearly", "The teacher elucidated the difficult concept."]], [["enervate", "make someone feel weak or tired", "The intense heat enervated him."], ["entrenched", "firmly established and difficult to change", "The habit had become deeply entrenched."], ["esoteric", "understood by only a small group with special knowledge", "The book discusses esoteric philosophical ideas."]], [["exorbitant", "excessively expensive", "The hotel charged an exorbitant price."], ["fastidious", "very careful about details and standards", "He is fastidious about keeping his desk tidy."], ["florid", "excessively elaborate or complicated in style", "His writing was rather florid."]], [["gregarious", "sociable; enjoying the company of others", "He is naturally gregarious and enjoys meeting people."], ["hackneyed", "overused and therefore no longer interesting", "The phrase has become hackneyed."], ["idiosyncratic", "peculiar or distinctive to an individual", "She has an idiosyncratic way of organising her books."]], [["impetuous", "acting suddenly without thinking", "His impetuous decision caused problems later."], ["inadvertent", "accidental; unintentional", "I made an inadvertent mistake."], ["incisive", "clear, sharp and intelligent", "She asked an incisive question."]]];
+const START = new Date("2026-09-21T00:00:00");
+let offset = 0;
+const completed = JSON.parse(localStorage.getItem("threeWordsCompleted") || "[]");
+
+function realDay(){
+ const d=new Date(); d.setHours(0,0,0,0);
+ return Math.floor((d-START)/86400000);
+}
+function idx(){
+ let n=realDay()+offset;
+ return Math.max(0,Math.min(lessons.length-1,n));
+}
+function render(){
+ const i=idx(), ws=lessons[i];
+ const d=new Date(START); d.setDate(d.getDate()+i);
+ document.getElementById("date").textContent=d.toLocaleDateString(undefined,{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+ document.getElementById("day").textContent="Day "+(i+1)+" / 30";
+ document.getElementById("bar").style.width=((i+1)/30*100)+"%";
+ document.getElementById("progressText").textContent=(i+1)+" of 30 advanced lessons";
+ document.getElementById("words").innerHTML=ws.map((w,n)=>`
+ <div class="card">
+   <div class="small">WORD ${n+1}</div>
+   <div class="word">${w[0]}</div>
+   <div class="meaning">${w[1]}</div>
+   <div class="example"><b>Example:</b> ${w[2]}</div>
+   <div class="actions"><button class="secondary" onclick="speak(${n})">🔊 Listen</button></div>
+ </div>`).join("");
+ document.getElementById("learned").textContent=completed.length;
+ document.getElementById("streak").textContent=streak();
+}
+function changeDay(n){
+ offset+=n;
+ render();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function speak(n){
+ const w=lessons[idx()][n];
+ const u=new SpeechSynthesisUtterance(w[0]+". "+w[1]+". "+w[2]);
+ u.rate=.8;
+ speechSynthesis.cancel();
+ speechSynthesis.speak(u);
+}
+function speakAll(){
+ for(let n=0;n<3;n++) setTimeout(()=>speak(n),n*3000);
+}
+function markDone(){
+ const k=new Date().toISOString().slice(0,10);
+ if(!completed.includes(k)){
+   completed.push(k);
+   localStorage.setItem("threeWordsCompleted",JSON.stringify(completed));
+ }
+ render();
+ alert("Great! Today's 3 words are complete.");
+}
+function streak(){
+ let n=0,d=new Date();
+ while(completed.includes(d.toISOString().slice(0,10))){
+   n++;
+   d.setDate(d.getDate()-1);
+   if(n>365) break;
+ }
+ return n;
+}
+function checkQuiz(){
+ const a=document.getElementById("quiz").value.trim().toLowerCase();
+ const ok=lessons[idx()].some(w=>w[0].toLowerCase()===a);
+ document.getElementById("result").textContent=
+   !a ? "Type a word first." :
+   ok ? "✓ Correct — well done!" :
+   "Not one of today's words. Try again.";
+}
+render();
+</script>
+</body>
+</html>
